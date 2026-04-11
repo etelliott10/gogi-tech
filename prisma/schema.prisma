@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Booking {
+  id                 String   @id @default(cuid())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  serviceType        String
+  scheduledAt        DateTime
+  timezone           String
+  status             String   @default("pending")
+  firstName          String
+  lastName           String
+  email              String
+  phone              String?
+  company            String
+  role               String
+  projectDescription String   @db.Text
+  budget             String?
+  howDidYouHear      String?
+  calendarEventId    String?
+  assignedTo         String?
+  notes              String?  @db.Text
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  name      String
+  email     String
+  message   String   @db.Text
+  replied   Boolean  @default(false)
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  active    Boolean  @default(true)
+}
