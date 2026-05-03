@@ -1,51 +1,57 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { Grid, Heading, Text, Flex } from '@radix-ui/themes';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { Card } from '@/components/ui/Card';
 import { FadeInOnScroll } from '@/components/ui/FadeInOnScroll';
 
 export function FeaturedCaseStudy() {
   return (
-    <section className="py-20">
+    <section style={{ padding: '5rem 0' }}>
       <div className="section-container">
         <FadeInOnScroll>
-          <Card variant="elevated" className="overflow-hidden p-0">
-            <div className="grid md:grid-cols-2">
-              <div className="min-h-[280px] bg-gradient-to-br from-primary/30 via-primary/10 to-transparent p-8">
+          <Card variant="elevated" style={{ overflow: 'hidden', padding: 0 }}>
+            <Grid columns={{ initial: '1', sm: '2' }}>
+              <div style={{
+                minHeight: '17.5rem',
+                background: 'linear-gradient(135deg, rgba(192,21,42,0.3), rgba(192,21,42,0.1), transparent)',
+                padding: '2rem'
+              }}>
                 <p className="mono-label">FEATURED CASE STUDY</p>
-                <h3 className="mt-3 max-w-sm font-display text-3xl font-bold">Acme Logistics AI Ops Overhaul</h3>
-                <p className="mt-3 max-w-md text-sm text-text-muted">
+                <Heading as="h3" size="7" className="font-display" mt="3" style={{ maxWidth: '20rem' }}>
+                  Acme Logistics AI Ops Overhaul
+                </Heading>
+                <Text as="p" size="2" mt="3" style={{ color: 'var(--color-text-muted)', maxWidth: '28rem' }}>
                   We deployed a decision-support agent system and automated routing workflows across support and operations.
-                </p>
+                </Text>
               </div>
 
-              <div className="space-y-5 p-8">
-                <div className="grid grid-cols-3 gap-3">
-                  <div>
-                    <p className="font-display text-3xl font-bold text-primary-light">
-                      <AnimatedCounter value={3} suffix="x" />
-                    </p>
-                    <p className="text-xs text-text-muted">Faster Response Time</p>
-                  </div>
-                  <div>
-                    <p className="font-display text-3xl font-bold text-primary-light">
-                      <AnimatedCounter value={41} suffix="%" />
-                    </p>
-                    <p className="text-xs text-text-muted">Lower Support Cost</p>
-                  </div>
-                  <div>
-                    <p className="font-display text-3xl font-bold text-primary-light">
-                      <AnimatedCounter value={100} suffix="%" />
-                    </p>
-                    <p className="text-xs text-text-muted">Client Retention</p>
-                  </div>
-                </div>
+              <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <Grid columns="3" gap="3">
+                  {[
+                    { value: 3, suffix: 'x', label: 'Faster Response Time' },
+                    { value: 41, suffix: '%', label: 'Lower Support Cost' },
+                    { value: 100, suffix: '%', label: 'Client Retention' }
+                  ].map((metric) => (
+                    <div key={metric.label}>
+                      <Text size="7" weight="bold" className="font-display" style={{ color: 'var(--color-primary-light)' }}>
+                        <AnimatedCounter value={metric.value} suffix={metric.suffix} />
+                      </Text>
+                      <Text as="p" size="1" style={{ color: 'var(--color-text-muted)' }}>{metric.label}</Text>
+                    </div>
+                  ))}
+                </Grid>
 
-                <Link href="/case-studies/acme-ai-support-agent" className="inline-flex items-center gap-2 text-sm font-semibold text-primary-light">
-                  Read Full Case Study <ArrowRight className="h-4 w-4" />
+                <Link href="/case-studies/acme-ai-support-agent">
+                  <Flex align="center" gap="2">
+                    <Text size="2" weight="bold" style={{ color: 'var(--color-primary-light)' }}>
+                      Read Full Case Study
+                    </Text>
+                    <ArrowRight size={16} style={{ color: 'var(--color-primary-light)' }} />
+                  </Flex>
                 </Link>
               </div>
-            </div>
+            </Grid>
           </Card>
         </FadeInOnScroll>
       </div>

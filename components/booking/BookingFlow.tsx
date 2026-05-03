@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
+import { Grid, Heading, Text } from '@radix-ui/themes';
 import { BookingSteps } from '@/components/booking/BookingSteps';
 import { ServiceSelector, type Service } from '@/components/booking/ServiceSelector';
 import { CalendarPicker } from '@/components/booking/CalendarPicker';
@@ -17,24 +18,24 @@ export function BookingFlow() {
   const currentStep: 1 | 2 | 3 = !service ? 1 : !slot ? 2 : 3;
 
   return (
-    <section className="pb-20 pt-8">
-      <div className="section-container grid gap-6 lg:grid-cols-[1fr_320px]">
-        <div className="space-y-4">
+    <section style={{ paddingBottom: '5rem', paddingTop: '2rem' }}>
+      <Grid className="section-container" columns={{ initial: '1', md: '1fr 320px' }} gap="6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <BookingSteps currentStep={currentStep} />
 
-          <Card className="space-y-5 p-5 sm:p-6">
+          <Card style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {currentStep === 1 ? (
               <>
-                <h2 className="font-display text-2xl font-bold">Step 1: Select Service</h2>
+                <Heading as="h2" size="6" className="font-display">Step 1: Select Service</Heading>
                 <ServiceSelector value={service} onChange={setService} />
               </>
             ) : null}
 
             {currentStep === 2 ? (
               <>
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h2 className="font-display text-2xl font-bold">Step 2: Pick Time</h2>
-                  <button className="text-xs text-primary-light" type="button" onClick={() => setService(null)}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                  <Heading as="h2" size="6" className="font-display">Step 2: Pick Time</Heading>
+                  <button type="button" onClick={() => setService(null)} style={{ fontSize: '0.75rem', color: 'var(--color-primary-light)', background: 'none', border: 'none', cursor: 'pointer' }}>
                     Change Service
                   </button>
                 </div>
@@ -44,25 +45,25 @@ export function BookingFlow() {
 
             {currentStep === 3 && service && slot ? (
               <>
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h2 className="font-display text-2xl font-bold">Step 3: Your Details</h2>
-                  <button className="text-xs text-primary-light" type="button" onClick={() => setSlot(null)}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                  <Heading as="h2" size="6" className="font-display">Step 3: Your Details</Heading>
+                  <button type="button" onClick={() => setSlot(null)} style={{ fontSize: '0.75rem', color: 'var(--color-primary-light)', background: 'none', border: 'none', cursor: 'pointer' }}>
                     Change Time
                   </button>
                 </div>
-                <p className="rounded-xl border border-border bg-bg-elevated p-3 text-sm text-text-muted">
+                <Text as="p" size="2" style={{ borderRadius: '0.75rem', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-elevated)', padding: '0.75rem', color: 'var(--color-text-muted)' }}>
                   Selected slot: {format(new Date(slot), 'EEEE, MMMM d · h:mm a')} ({timezone})
-                </p>
+                </Text>
                 <ContactForm serviceType={service} scheduledAt={slot} timezone={timezone} />
               </>
             ) : null}
           </Card>
         </div>
 
-        <aside className="hidden lg:block">
+        <aside style={{ display: 'none' }} className="booking-sidebar-desktop">
           <BookingSidebar />
         </aside>
-      </div>
+      </Grid>
     </section>
   );
 }

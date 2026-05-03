@@ -1,9 +1,9 @@
-import { Loader2 } from 'lucide-react';
+import { Flex, Spinner } from '@radix-ui/themes';
 
 export function Loader() {
   return (
-    <div className="flex items-center justify-center py-6">
-      <Loader2 className="h-6 w-6 animate-spin text-primary-light" />
-    </div>
+    <Flex justify="center" py="6">
+      <Spinner size="3" />
+    </Flex>
   );
 }

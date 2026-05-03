@@ -1,45 +1,47 @@
-import { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import { Select as RadixSelect, Text } from '@radix-ui/themes';
 
 interface Option {
   label: string;
   value: string;
 }
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectProps {
   label?: string;
   error?: string;
   options: Option[];
+  value?: string;
+  onValueChange?: (value: string) => void;
+  placeholder?: string;
+  name?: string;
 }
 
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
-  { label, error, className, options, id, ...props },
-  ref
-) {
+export function Select({ label, error, options, value, onValueChange, placeholder, name }: SelectProps) {
   return (
-    <div className="space-y-2">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       {label ? (
-        <label htmlFor={id} className="text-sm font-medium text-text-primary">
+        <Text as="label" size="2" weight="medium">
           {label}
-        </label>
+        </Text>
       ) : null}
-      <select
-        id={id}
-        ref={ref}
-        className={cn(
-          'h-11 w-full rounded-xl border border-border bg-bg-card px-3 text-sm text-text-primary outline-none transition',
-          'focus:border-primary-light focus:ring-2 focus:ring-primary/20',
-          className
-        )}
-        {...props}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      {error ? <p className="text-xs text-red-400">{error}</p> : null}
+      <RadixSelect.Root value={value} onValueChange={onValueChange} name={name}>
+        <RadixSelect.Trigger
+          variant="surface"
+          placeholder={placeholder ?? 'Select…'}
+          style={{ width: '100%' }}
+        />
+        <RadixSelect.Content>
+          {options.map((option) => (
+            <RadixSelect.Item key={option.value} value={option.value}>
+              {option.label}
+            </RadixSelect.Item>
+          ))}
+        </RadixSelect.Content>
+      </RadixSelect.Root>
+      {error ? (
+        <Text size="1" color="red">
+          {error}
+        </Text>
+      ) : null}
     </div>
   );
-});
+}

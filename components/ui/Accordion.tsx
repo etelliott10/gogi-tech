@@ -15,16 +15,16 @@ interface AccordionProps {
 
 export function Accordion({ items }: AccordionProps) {
   return (
-    <AccordionPrimitive.Root type="single" collapsible className="space-y-3">
+    <AccordionPrimitive.Root type="single" collapsible className="accordion-root">
       {items.map((item) => (
-        <AccordionPrimitive.Item key={item.id} value={item.id} className="rounded-xl border border-border bg-bg-card">
+        <AccordionPrimitive.Item key={item.id} value={item.id} className="accordion-item">
           <AccordionPrimitive.Header>
-            <AccordionPrimitive.Trigger className="flex w-full items-center justify-between px-4 py-3 text-left font-medium">
+            <AccordionPrimitive.Trigger className="accordion-trigger">
               {item.title}
-              <ChevronDown className="h-4 w-4 text-text-muted transition data-[state=open]:rotate-180" />
+              <ChevronDown size={16} className="accordion-chevron" />
             </AccordionPrimitive.Trigger>
           </AccordionPrimitive.Header>
-          <AccordionPrimitive.Content className="px-4 pb-4 text-sm text-text-muted">
+          <AccordionPrimitive.Content className="accordion-content">
             {item.content}
           </AccordionPrimitive.Content>
         </AccordionPrimitive.Item>

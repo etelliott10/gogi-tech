@@ -1,13 +1,18 @@
 import Link from 'next/link';
+import { Heading, Text } from '@radix-ui/themes';
 
 export default function ThankYouPage() {
   return (
-    <main className="pb-20 pt-28">
-      <section className="section-container max-w-3xl rounded-2xl border border-border bg-bg-card p-8 text-center">
-        <h1 className="font-display text-4xl font-extrabold">Thank You</h1>
-        <p className="mt-3 text-text-muted">We received your submission and will be in touch shortly.</p>
-        <Link href="/" className="mt-6 inline-block text-sm font-semibold text-primary-light">
-          Return to home
+    <main style={{ paddingBottom: '5rem', paddingTop: '7rem' }}>
+      <section className="section-container" style={{ maxWidth: '48rem', borderRadius: '1rem', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-card)', padding: '2rem', textAlign: 'center' }}>
+        <Heading as="h1" size="9" className="font-display">Thank You</Heading>
+        <Text as="p" size="3" mt="3" style={{ color: 'var(--color-text-muted)' }}>
+          We received your submission and will be in touch shortly.
+        </Text>
+        <Link href="/">
+          <Text size="2" weight="bold" mt="6" style={{ display: 'inline-block', color: 'var(--color-primary-light)' }}>
+            Return to home
+          </Text>
         </Link>
       </section>
     </main>

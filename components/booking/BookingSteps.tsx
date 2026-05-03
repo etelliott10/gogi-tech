@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { Flex, Text } from '@radix-ui/themes';
 
 const labels = ['Select Service', 'Pick Time', 'Your Details'];
 
@@ -8,31 +8,47 @@ interface BookingStepsProps {
 
 export function BookingSteps({ currentStep }: BookingStepsProps) {
   return (
-    <div className="rounded-2xl border border-border bg-bg-card p-4">
-      <div className="flex items-center gap-2">
+    <div style={{ borderRadius: '1rem', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-card)', padding: '1rem' }}>
+      <Flex align="center" gap="2">
         {labels.map((label, index) => {
           const step = (index + 1) as 1 | 2 | 3;
+          const active = step <= currentStep;
           return (
-            <div key={label} className="flex flex-1 items-center gap-2">
-              <span
-                className={cn(
-                  'inline-flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold',
-                  step <= currentStep ? 'bg-primary text-white' : 'bg-bg-elevated text-text-muted'
-                )}
-              >
+            <Flex key={label} align="center" gap="2" style={{ flex: 1 }}>
+              <span style={{
+                display: 'inline-flex',
+                height: '2rem',
+                width: '2rem',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '50%',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                flexShrink: 0,
+                backgroundColor: active ? 'var(--color-primary)' : 'var(--color-bg-elevated)',
+                color: active ? 'white' : 'var(--color-text-muted)'
+              }}>
                 {step}
               </span>
-              <span className={cn('hidden text-xs md:inline', step <= currentStep ? 'text-text-primary' : 'text-text-muted')}>
+              <Text size="1" style={{ display: 'none', color: active ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }} className="step-label">
                 {label}
-              </span>
-              {step < 3 ? <span className="h-[1px] flex-1 bg-border" /> : null}
-            </div>
+              </Text>
+              {step < 3 ? (
+                <span style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border)' }} />
+              ) : null}
+            </Flex>
           );
         })}
-      </div>
+      </Flex>
 
-      <div className="mt-4 h-2 rounded-full bg-bg-elevated">
-        <div className={cn('h-full rounded-full bg-primary transition-all duration-300', currentStep === 1 ? 'w-1/3' : currentStep === 2 ? 'w-2/3' : 'w-full')} />
+      <div style={{ marginTop: '1rem', height: '0.5rem', borderRadius: '9999px', backgroundColor: 'var(--color-bg-elevated)' }}>
+        <div style={{
+          height: '100%',
+          borderRadius: '9999px',
+          backgroundColor: 'var(--color-primary)',
+          transition: 'width 0.3s',
+          width: currentStep === 1 ? '33.33%' : currentStep === 2 ? '66.66%' : '100%'
+        }} />
       </div>
     </div>
   );

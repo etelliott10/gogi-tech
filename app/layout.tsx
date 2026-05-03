@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { DM_Sans, JetBrains_Mono, Syne } from 'next/font/google';
+import { Theme } from '@radix-ui/themes';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import '@radix-ui/themes/styles.css';
 import 'react-day-picker/dist/style.css';
 import '@/styles/globals.css';
 
@@ -50,9 +52,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
       <body>
-        <Navbar transparent />
-        {children}
-        <Footer />
+        <Theme
+          appearance="dark"
+          accentColor="crimson"
+          grayColor="mauve"
+          radius="large"
+          scaling="100%"
+        >
+          <Navbar transparent />
+          {children}
+          <Footer />
+        </Theme>
       </body>
     </html>
   );

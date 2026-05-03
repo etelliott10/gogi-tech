@@ -1,12 +1,10 @@
+import { Tooltip as RadixTooltip } from '@radix-ui/themes';
+
 interface TooltipProps {
   label: string;
   children: React.ReactNode;
 }
 
 export function Tooltip({ label, children }: TooltipProps) {
-  return (
-    <span title={label} aria-label={label}>
-      {children}
-    </span>
-  );
+  return <RadixTooltip content={label}>{children as React.ReactElement}</RadixTooltip>;
 }

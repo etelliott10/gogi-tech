@@ -1,25 +1,30 @@
 import Link from 'next/link';
+import { Grid, Heading, Text } from '@radix-ui/themes';
 import { services } from '@/lib/content';
 import { Card } from '@/components/ui/Card';
 
 export default function ServicesPage() {
   return (
-    <main className="pb-20 pt-28">
+    <main style={{ paddingBottom: '5rem', paddingTop: '7rem' }}>
       <section className="section-container">
-        <h1 className="font-display text-4xl font-extrabold">Services</h1>
-        <p className="mt-3 max-w-2xl text-text-muted">Choose the capability your team needs, or book a consult and we can scope the right mix.</p>
+        <Heading as="h1" size="9" className="font-display">Services</Heading>
+        <Text as="p" size="3" mt="3" style={{ color: 'var(--color-text-muted)', maxWidth: '40rem' }}>
+          Choose the capability your team needs, or book a consult and we can scope the right mix.
+        </Text>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-2">
+        <Grid columns={{ initial: '1', sm: '2' }} gap="4" mt="7">
           {services.map((service) => (
-            <Card key={service.slug} className="h-full p-6">
-              <h2 className="font-display text-2xl font-bold">{service.title}</h2>
-              <p className="mt-2 text-sm text-text-muted">{service.shortDescription}</p>
-              <Link href={`/services/${service.slug}`} className="mt-4 inline-block text-sm font-semibold text-primary-light">
-                View Service →
+            <Card key={service.slug} style={{ height: '100%', padding: '1.5rem' }}>
+              <Heading as="h2" size="6" className="font-display">{service.title}</Heading>
+              <Text as="p" size="2" mt="2" style={{ color: 'var(--color-text-muted)' }}>{service.shortDescription}</Text>
+              <Link href={`/services/${service.slug}`}>
+                <Text size="2" weight="bold" mt="4" style={{ display: 'inline-block', color: 'var(--color-primary-light)' }}>
+                  View Service →
+                </Text>
               </Link>
             </Card>
           ))}
-        </div>
+        </Grid>
       </section>
     </main>
   );

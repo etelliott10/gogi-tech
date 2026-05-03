@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import { TextField, Text } from '@radix-ui/themes';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -7,27 +7,29 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, error, className, id, ...props },
+  { label, error, id, ...props },
   ref
 ) {
   return (
-    <div className="space-y-2">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       {label ? (
-        <label htmlFor={id} className="text-sm font-medium text-text-primary">
+        <Text as="label" htmlFor={id} size="2" weight="medium">
           {label}
-        </label>
+        </Text>
       ) : null}
-      <input
+      <TextField.Root
         id={id}
         ref={ref}
-        className={cn(
-          'h-11 w-full rounded-xl border border-border bg-bg-card px-3 text-sm text-text-primary outline-none transition',
-          'placeholder:text-text-muted focus:border-primary-light focus:ring-2 focus:ring-primary/20',
-          className
-        )}
-        {...props}
+        size="2"
+        variant="surface"
+        color={error ? 'red' : undefined}
+        {...(props as React.ComponentPropsWithoutRef<typeof TextField.Root>)}
       />
-      {error ? <p className="text-xs text-red-400">{error}</p> : null}
+      {error ? (
+        <Text size="1" color="red">
+          {error}
+        </Text>
+      ) : null}
     </div>
   );
 });

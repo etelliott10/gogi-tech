@@ -1,7 +1,11 @@
+'use client';
+
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Button as RadixButton, Spinner } from '@radix-ui/themes';
+
+type RadixVariant = 'solid' | 'soft' | 'outline' | 'ghost' | 'surface';
+type RadixSize = '1' | '2' | '3';
 
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
@@ -15,35 +19,22 @@ interface ButtonProps {
   href?: string;
   className?: string;
   type?: 'button' | 'submit' | 'reset';
+  style?: React.CSSProperties;
 }
 
-const variantStyles = {
-  primary: 'bg-[#C0152A] text-white hover:bg-[#8B0D1E] shadow-[0_0_20px_rgba(192,21,42,0.4)]',
-  secondary: 'bg-[#1C1C21] text-white border border-[#2A2A32] hover:border-[#C0152A]',
-  ghost: 'bg-transparent text-[#C0152A] hover:bg-[rgba(192,21,42,0.1)]',
-  outline: 'border-2 border-[#C0152A] text-[#C0152A] hover:bg-[#C0152A] hover:text-white'
+const variantMap: Record<NonNullable<ButtonProps['variant']>, RadixVariant> = {
+  primary: 'solid',
+  secondary: 'soft',
+  ghost: 'ghost',
+  outline: 'outline'
 };
 
-const sizeStyles = {
-  sm: 'h-9 px-3 text-sm',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
-  xl: 'h-14 px-8 text-lg'
+const sizeMap: Record<NonNullable<ButtonProps['size']>, RadixSize> = {
+  sm: '1',
+  md: '2',
+  lg: '2',
+  xl: '3'
 };
-
-const baseStyles =
-  'inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-dark focus-visible:ring-primary-light';
-
-function ButtonContent({ children, icon, iconPosition, loading }: Pick<ButtonProps, 'children' | 'icon' | 'iconPosition' | 'loading'>) {
-  return (
-    <>
-      {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-      {!loading && icon && iconPosition === 'left' ? icon : null}
-      {children}
-      {!loading && icon && iconPosition === 'right' ? icon : null}
-    </>
-  );
-}
 
 export function Button({
   variant = 'primary',
@@ -56,41 +47,48 @@ export function Button({
   onClick,
   href,
   className,
-  type = 'button'
+  type = 'button',
+  style
 }: ButtonProps) {
-  const classes = cn(
-    baseStyles,
-    variantStyles[variant],
-    sizeStyles[size],
-    'disabled:cursor-not-allowed disabled:opacity-60',
-    className
+  const radixVariant = variantMap[variant];
+  const radixSize = sizeMap[size];
+
+  const content = (
+    <>
+      {loading ? <Spinner /> : null}
+      {!loading && icon && iconPosition === 'left' ? icon : null}
+      {children}
+      {!loading && icon && iconPosition === 'right' ? icon : null}
+    </>
   );
 
   if (href && !disabled && !loading) {
     return (
-      <Link href={href} className={classes}>
-        <ButtonContent icon={icon} iconPosition={iconPosition} loading={loading}>
-          {children}
-        </ButtonContent>
-      </Link>
-    );
-  }
-
-  if (href && (disabled || loading)) {
-    return (
-      <span className={cn(classes, 'pointer-events-none opacity-60')}>
-        <ButtonContent icon={icon} iconPosition={iconPosition} loading={loading}>
-          {children}
-        </ButtonContent>
-      </span>
+      <RadixButton
+        variant={radixVariant}
+        size={radixSize}
+        radius="full"
+        className={className}
+        style={style}
+        asChild
+      >
+        <Link href={href}>{content}</Link>
+      </RadixButton>
     );
   }
 
   return (
-    <button type={type} onClick={onClick} disabled={disabled || loading} className={classes}>
-      <ButtonContent icon={icon} iconPosition={iconPosition} loading={loading}>
-        {children}
-      </ButtonContent>
-    </button>
+    <RadixButton
+      type={type}
+      variant={radixVariant}
+      size={radixSize}
+      radius="full"
+      disabled={disabled || loading}
+      onClick={onClick}
+      className={className}
+      style={style}
+    >
+      {content}
+    </RadixButton>
   );
 }

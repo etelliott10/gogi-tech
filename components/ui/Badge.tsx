@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { Badge as RadixBadge } from '@radix-ui/themes';
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -7,13 +7,8 @@ interface BadgeProps {
 
 export function Badge({ children, className }: BadgeProps) {
   return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-primary-light',
-        className
-      )}
-    >
+    <RadixBadge variant="soft" color="crimson" radius="full" className={className}>
       {children}
-    </span>
+    </RadixBadge>
   );
 }

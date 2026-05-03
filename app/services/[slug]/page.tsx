@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Grid, Heading, Text, Flex } from '@radix-ui/themes';
 import { services, caseStudies } from '@/lib/content';
 import { Accordion } from '@/components/ui/Accordion';
 import { BookingBanner } from '@/components/sections/BookingBanner';
+import { Button } from '@/components/ui/Button';
 
 interface ServicePageProps {
   params: { slug: string };
@@ -15,90 +17,86 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
   const service = services.find((entry) => entry.slug === params.slug);
-  if (!service) {
-    return { title: 'Service Not Found' };
-  }
-
-  return {
-    title: service.title,
-    description: service.shortDescription
-  };
+  if (!service) return { title: 'Service Not Found' };
+  return { title: service.title, description: service.shortDescription };
 }
 
 export default function ServiceDetailPage({ params }: ServicePageProps) {
   const service = services.find((entry) => entry.slug === params.slug);
-
-  if (!service) {
-    notFound();
-  }
+  if (!service) notFound();
 
   const relatedCaseStudies = caseStudies.filter((entry) => service.caseStudyIds.includes(entry.id));
 
   return (
-    <main className="pt-28">
-      <section className="section-container pb-14">
+    <main style={{ paddingTop: '7rem' }}>
+      <section className="section-container" style={{ paddingBottom: '3.5rem' }}>
         <p className="mono-label">{'// SERVICE'}</p>
-        <h1 className="mt-2 font-display text-4xl font-extrabold">{service.title}</h1>
-        <p className="mt-4 max-w-3xl text-text-muted">{service.longDescription}</p>
-        <Link href="/book" className="mt-6 inline-block rounded-full bg-primary px-6 py-3 text-sm font-medium text-white">
-          Book a Call
-        </Link>
-      </section>
-
-      <section className="section-container grid gap-10 border-t border-border py-12 lg:grid-cols-2">
-        <div>
-          <h2 className="font-display text-2xl font-bold">Our Approach</h2>
-          <ol className="mt-4 space-y-3 text-sm text-text-muted">
-            {service.approach.map((step) => (
-              <li key={step} className="rounded-xl border border-border bg-bg-card px-4 py-3">
-                {step}
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        <div>
-          <h2 className="font-display text-2xl font-bold">Deliverables</h2>
-          <ul className="mt-4 space-y-3 text-sm text-text-muted">
-            {service.deliverables.map((item) => (
-              <li key={item} className="rounded-xl border border-border bg-bg-card px-4 py-3">
-                {item}
-              </li>
-            ))}
-          </ul>
+        <Heading as="h1" size="9" className="font-display" mt="2">{service.title}</Heading>
+        <Text as="p" size="3" mt="4" style={{ color: 'var(--color-text-muted)', maxWidth: '48rem' }}>
+          {service.longDescription}
+        </Text>
+        <div style={{ marginTop: '1.5rem' }}>
+          <Button href="/book" size="lg">Book a Call</Button>
         </div>
       </section>
 
-      <section className="section-container border-t border-border py-12">
-        <h2 className="font-display text-2xl font-bold">Tech Stack</h2>
-        <div className="mt-4 flex flex-wrap gap-2">
+      <section className="section-container" style={{ borderTop: '1px solid var(--color-border)', paddingTop: '3rem', paddingBottom: '3rem' }}>
+        <Grid columns={{ initial: '1', sm: '2' }} gap="8">
+          <div>
+            <Heading as="h2" size="6" className="font-display">Our Approach</Heading>
+            <Flex direction="column" gap="3" mt="4">
+              {service.approach.map((step) => (
+                <div key={step} style={{ borderRadius: '0.75rem', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-card)', padding: '0.75rem 1rem' }}>
+                  <Text size="2" style={{ color: 'var(--color-text-muted)' }}>{step}</Text>
+                </div>
+              ))}
+            </Flex>
+          </div>
+          <div>
+            <Heading as="h2" size="6" className="font-display">Deliverables</Heading>
+            <Flex direction="column" gap="3" mt="4">
+              {service.deliverables.map((item) => (
+                <div key={item} style={{ borderRadius: '0.75rem', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-card)', padding: '0.75rem 1rem' }}>
+                  <Text size="2" style={{ color: 'var(--color-text-muted)' }}>{item}</Text>
+                </div>
+              ))}
+            </Flex>
+          </div>
+        </Grid>
+      </section>
+
+      <section className="section-container" style={{ borderTop: '1px solid var(--color-border)', paddingTop: '3rem', paddingBottom: '3rem' }}>
+        <Heading as="h2" size="6" className="font-display">Tech Stack</Heading>
+        <Flex gap="2" wrap="wrap" mt="4">
           {service.techStack.map((tech) => (
-            <span key={tech} className="rounded-full border border-border bg-bg-card px-3 py-1 text-sm text-text-muted">
+            <span key={tech} style={{ borderRadius: '9999px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-card)', padding: '0.25rem 0.75rem', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
               {tech}
             </span>
           ))}
-        </div>
+        </Flex>
       </section>
 
-      <section className="section-container border-t border-border py-12">
-        <h2 className="font-display text-2xl font-bold">Related Case Studies</h2>
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
+      <section className="section-container" style={{ borderTop: '1px solid var(--color-border)', paddingTop: '3rem', paddingBottom: '3rem' }}>
+        <Heading as="h2" size="6" className="font-display">Related Case Studies</Heading>
+        <Grid columns={{ initial: '1', sm: '2' }} gap="4" mt="5">
           {relatedCaseStudies.map((study) => (
-            <div key={study.id} className="rounded-2xl border border-border bg-bg-card p-5">
-              <p className="text-xs text-text-muted">{study.industry}</p>
-              <h3 className="mt-2 text-xl font-semibold">{study.clientName}</h3>
-              <p className="mt-2 text-sm text-text-muted">{study.challenge}</p>
-              <Link href={`/case-studies/${study.slug}`} className="mt-3 inline-block text-sm font-semibold text-primary-light">
-                Read Case Study →
+            <div key={study.id} style={{ borderRadius: '1rem', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-card)', padding: '1.25rem' }}>
+              <Text size="1" style={{ color: 'var(--color-text-muted)' }}>{study.industry}</Text>
+              <Heading as="h3" size="5" mt="2">{study.clientName}</Heading>
+              <Text as="p" size="2" mt="2" style={{ color: 'var(--color-text-muted)' }}>{study.challenge}</Text>
+              <Link href={`/case-studies/${study.slug}`}>
+                <Text size="2" weight="bold" mt="3" style={{ display: 'inline-block', color: 'var(--color-primary-light)' }}>
+                  Read Case Study →
+                </Text>
               </Link>
             </div>
           ))}
-        </div>
+        </Grid>
       </section>
 
-      <section className="section-container border-t border-border py-12">
-        <h2 className="font-display text-2xl font-bold">FAQ</h2>
-        <div className="mt-4">
+      <section className="section-container" style={{ borderTop: '1px solid var(--color-border)', paddingTop: '3rem', paddingBottom: '3rem' }}>
+        <Heading as="h2" size="6" className="font-display">FAQ</Heading>
+        <div style={{ marginTop: '1rem' }}>
           <Accordion
             items={service.faqs.map((faq) => ({
               id: faq.question.toLowerCase().replace(/[^a-z0-9]+/g, '-'),

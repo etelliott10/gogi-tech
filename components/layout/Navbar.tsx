@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Flex, Text } from '@radix-ui/themes';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { cn } from '@/lib/utils';
 
 interface NavbarProps {
   transparent?: boolean;
@@ -29,87 +29,132 @@ export function Navbar({ transparent = true }: NavbarProps) {
   }, []);
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-    };
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [open]);
+
+  const scrolled = isScrolled || !transparent;
 
   return (
     <>
-      <header
-        className={cn(
-          'fixed left-0 right-0 top-0 z-40 transition-all duration-300',
-          isScrolled || !transparent ? 'border-b border-border/70 bg-bg-elevated/90 backdrop-blur-md' : 'bg-transparent'
-        )}
-      >
-        <div className="section-container flex h-20 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary" />
-            <span className="font-display text-xl font-extrabold tracking-tight">GOGI TECH</span>
+      <header style={{
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        top: 0,
+        zIndex: 50,
+        transition: 'all 0.3s',
+        borderBottom: scrolled ? '1px solid var(--color-border)' : 'none',
+        backgroundColor: scrolled ? 'rgba(28,28,33,0.9)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(12px)' : undefined
+      }}>
+        <Flex className="section-container" align="center" justify="between" style={{ height: '5rem' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{
+              display: 'inline-block',
+              height: '0.625rem',
+              width: '0.625rem',
+              borderRadius: '50%',
+              backgroundColor: 'var(--color-primary)'
+            }} />
+            <Text weight="bold" size="4" className="font-display" style={{ letterSpacing: '-0.02em' }}>
+              GOGI TECH
+            </Text>
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="text-sm text-text-muted transition hover:text-text-primary">
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          <Flex asChild gap="7" align="center" display={{ initial: 'none', sm: 'flex' } as never}>
+            <nav>
+              {navLinks.map((link) => (
+                <Link key={link.href} href={link.href}>
+                  <Text size="2" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-text-primary)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-muted)')}>
+                    {link.label}
+                  </Text>
+                </Link>
+              ))}
+            </nav>
+          </Flex>
 
-          <div className="hidden md:block">
-            <Button href="/book" size="md">
-              Book a Call
-            </Button>
-          </div>
+          <Flex display={{ initial: 'none', sm: 'flex' } as never}>
+            <Button href="/book" size="md">Book a Call</Button>
+          </Flex>
 
           <button
             type="button"
-            className="rounded-lg border border-border p-2 text-text-primary md:hidden"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '0.5rem',
+              border: '1px solid var(--color-border)',
+              padding: '0.5rem',
+              color: 'var(--color-text-primary)',
+              background: 'none',
+              cursor: 'pointer'
+            }}
             onClick={() => setOpen(true)}
             aria-label="Open menu"
+            className="md-hidden-desktop"
           >
-            <Menu className="h-5 w-5" />
+            <Menu size={20} />
           </button>
-        </div>
+        </Flex>
       </header>
 
       {open ? (
-        <div className="fixed inset-0 z-50 bg-bg-dark/95 p-6 md:hidden">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="font-display text-xl font-extrabold" onClick={() => setOpen(false)}>
-              GOGI TECH
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 50,
+          backgroundColor: 'rgba(10,10,12,0.97)',
+          padding: '1.5rem'
+        }}>
+          <Flex align="center" justify="between">
+            <Link href="/" onClick={() => setOpen(false)}>
+              <Text weight="bold" size="4" className="font-display">GOGI TECH</Text>
             </Link>
             <button
               type="button"
-              className="rounded-lg border border-border p-2"
+              style={{
+                borderRadius: '0.5rem',
+                border: '1px solid var(--color-border)',
+                padding: '0.5rem',
+                background: 'none',
+                color: 'var(--color-text-primary)',
+                cursor: 'pointer'
+              }}
               onClick={() => setOpen(false)}
               aria-label="Close menu"
             >
-              <X className="h-5 w-5" />
+              <X size={20} />
             </button>
-          </div>
+          </Flex>
 
-          <div className="mt-10 flex flex-col gap-4">
+          <Flex direction="column" gap="3" mt="8" style={{ marginTop: '2.5rem' }}>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="rounded-xl border border-border bg-bg-card px-4 py-3 text-lg font-medium"
+                style={{
+                  borderRadius: '0.75rem',
+                  border: '1px solid var(--color-border)',
+                  backgroundColor: 'var(--color-bg-card)',
+                  padding: '0.75rem 1rem',
+                  fontSize: '1.125rem',
+                  fontWeight: 500
+                }}
               >
                 {link.label}
               </Link>
             ))}
-            <Button href="/book" size="lg" className="mt-2 text-center" onClick={() => setOpen(false)}>
-              Book a Call
-            </Button>
-          </div>
+            <div style={{ marginTop: '0.5rem' }}>
+              <Button href="/book" size="lg" onClick={() => setOpen(false)} style={{ width: '100%', justifyContent: 'center' }}>
+                Book a Call
+              </Button>
+            </div>
+          </Flex>
         </div>
       ) : null}
     </>

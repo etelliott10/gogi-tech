@@ -1,36 +1,37 @@
 import { Star } from 'lucide-react';
+import { Grid, Heading, Text, Flex } from '@radix-ui/themes';
 import { testimonials } from '@/lib/content';
 import { Card } from '@/components/ui/Card';
 import { FadeInOnScroll } from '@/components/ui/FadeInOnScroll';
 
 export function Testimonials() {
   return (
-    <section className="py-20">
+    <section style={{ padding: '5rem 0' }}>
       <div className="section-container">
         <FadeInOnScroll>
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">What Clients Say</h2>
+          <Heading as="h2" size="8" className="font-display">What Clients Say</Heading>
         </FadeInOnScroll>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
+        <Grid columns={{ initial: '1', sm: '3' }} gap="4" mt="6">
           {testimonials.map((item, index) => (
             <FadeInOnScroll key={item.name} delay={index * 0.1}>
-              <Card className="h-full border-l-4 border-l-primary-light">
-                <div className="mb-3 flex items-center gap-1 text-accent-gold">
+              <Card style={{ height: '100%', borderLeft: '4px solid var(--color-primary-light)' }}>
+                <Flex gap="1" mb="3" style={{ color: 'var(--color-accent-gold)' }}>
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current" />
+                    <Star key={i} size={16} fill="currentColor" />
                   ))}
-                </div>
-                <p className="text-sm leading-relaxed text-text-primary">“{item.quote}”</p>
-                <div className="mt-4">
-                  <p className="text-sm font-semibold">{item.name}</p>
-                  <p className="text-xs text-text-muted">
+                </Flex>
+                <Text as="p" size="2" style={{ lineHeight: 1.6 }}>&ldquo;{item.quote}&rdquo;</Text>
+                <div style={{ marginTop: '1rem' }}>
+                  <Text as="p" size="2" weight="bold">{item.name}</Text>
+                  <Text as="p" size="1" style={{ color: 'var(--color-text-muted)' }}>
                     {item.title}, {item.company}
-                  </p>
+                  </Text>
                 </div>
               </Card>
             </FadeInOnScroll>
           ))}
-        </div>
+        </Grid>
       </div>
     </section>
   );

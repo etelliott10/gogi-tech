@@ -1,21 +1,32 @@
+import { Flex, Heading, Text } from '@radix-ui/themes';
 import { Button } from '@/components/ui/Button';
 
 export function BookingBanner() {
   return (
-    <section className="pb-24 pt-10">
+    <section style={{ paddingTop: '2.5rem', paddingBottom: '6rem' }}>
       <div className="section-container">
-        <div className="overflow-hidden rounded-3xl border border-primary/40 bg-gradient-to-r from-primary to-primary-dark p-8 md:p-12">
-          <p className="mono-label text-white/80">LIMITED SLOTS THIS WEEK</p>
-          <h2 className="mt-3 max-w-2xl font-display text-3xl font-extrabold text-white sm:text-4xl">
+        <div style={{
+          overflow: 'hidden',
+          borderRadius: '1.5rem',
+          border: '1px solid rgba(192,21,42,0.4)',
+          background: 'linear-gradient(to right, var(--color-primary), var(--color-primary-dark))',
+          padding: '2rem 3rem'
+        }}>
+          <p className="mono-label" style={{ color: 'rgba(255,255,255,0.8)' }}>LIMITED SLOTS THIS WEEK</p>
+          <Heading as="h2" size="8" className="font-display" mt="3" style={{ color: 'white', maxWidth: '40rem' }}>
             Ready to automate your future?
-          </h2>
-          <p className="mt-3 max-w-2xl text-white/85">Book a free 30-minute strategy call with our team.</p>
-          <div className="mt-6 flex flex-wrap items-center gap-4">
-            <Button href="/book" size="xl" className="bg-white text-primary hover:bg-white/90">
+          </Heading>
+          <Text as="p" size="3" mt="3" style={{ color: 'rgba(255,255,255,0.85)', maxWidth: '40rem' }}>
+            Book a free 30-minute strategy call with our team.
+          </Text>
+          <Flex gap="4" mt="6" align="center" wrap="wrap">
+            <Button href="/book" size="xl" style={{ backgroundColor: 'white', color: 'var(--color-primary)' }}>
               Book My Free Call
             </Button>
-            <p className="text-sm font-medium text-white/90">Only 3 consultation slots left this week.</p>
-          </div>
+            <Text size="2" weight="medium" style={{ color: 'rgba(255,255,255,0.9)' }}>
+              Only 3 consultation slots left this week.
+            </Text>
+          </Flex>
         </div>
       </div>
     </section>

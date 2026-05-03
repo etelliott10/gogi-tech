@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { Grid } from '@radix-ui/themes';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
@@ -35,38 +36,24 @@ export function ContactForm({ serviceType, scheduledAt, timezone }: ContactFormP
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting }
   } = useForm<FormValues>({
     resolver: zodResolver(
       bookingSchema.pick({
-        firstName: true,
-        lastName: true,
-        email: true,
-        phone: true,
-        company: true,
-        role: true,
-        projectDescription: true,
-        budget: true,
-        howDidYouHear: true
+        firstName: true, lastName: true, email: true, phone: true,
+        company: true, role: true, projectDescription: true, budget: true, howDidYouHear: true
       })
     ),
-    defaultValues: {
-      budget: 'Not Sure'
-    }
+    defaultValues: { budget: 'Not Sure' }
   });
 
   const onSubmit = handleSubmit(async (values) => {
     setServerError(null);
-
     const response = await fetch('/api/bookings/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...values,
-        serviceType,
-        scheduledAt,
-        timezone
-      })
+      body: JSON.stringify({ ...values, serviceType, scheduledAt, timezone })
     });
 
     if (!response.ok) {
@@ -80,21 +67,21 @@ export function ContactForm({ serviceType, scheduledAt, timezone }: ContactFormP
   });
 
   return (
-    <form className="space-y-4" onSubmit={onSubmit}>
-      <div className="grid gap-4 sm:grid-cols-2">
+    <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} onSubmit={onSubmit}>
+      <Grid columns={{ initial: '1', xs: '2' }} gap="4">
         <Input id="firstName" label="First Name" {...register('firstName')} error={errors.firstName?.message} />
         <Input id="lastName" label="Last Name" {...register('lastName')} error={errors.lastName?.message} />
-      </div>
+      </Grid>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <Grid columns={{ initial: '1', xs: '2' }} gap="4">
         <Input id="email" label="Email" type="email" {...register('email')} error={errors.email?.message} />
         <Input id="phone" label="Phone (optional)" {...register('phone')} error={errors.phone?.message} />
-      </div>
+      </Grid>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <Grid columns={{ initial: '1', xs: '2' }} gap="4">
         <Input id="company" label="Company" {...register('company')} error={errors.company?.message} />
         <Input id="role" label="Role" {...register('role')} error={errors.role?.message} />
-      </div>
+      </Grid>
 
       <Textarea
         id="projectDescription"
@@ -105,26 +92,31 @@ export function ContactForm({ serviceType, scheduledAt, timezone }: ContactFormP
         error={errors.projectDescription?.message}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Select
-          id="budget"
-          label="Budget"
-          {...register('budget')}
-          options={[
-            { label: '$5K-$15K', value: '$5K-$15K' },
-            { label: '$15K-$50K', value: '$15K-$50K' },
-            { label: '$50K+', value: '$50K+' },
-            { label: 'Not Sure', value: 'Not Sure' }
-          ]}
-          error={errors.budget?.message}
+      <Grid columns={{ initial: '1', xs: '2' }} gap="4">
+        <Controller
+          name="budget"
+          control={control}
+          render={({ field }) => (
+            <Select
+              label="Budget"
+              value={field.value}
+              onValueChange={field.onChange}
+              options={[
+                { label: '$5K-$15K', value: '$5K-$15K' },
+                { label: '$15K-$50K', value: '$15K-$50K' },
+                { label: '$50K+', value: '$50K+' },
+                { label: 'Not Sure', value: 'Not Sure' }
+              ]}
+              error={errors.budget?.message}
+            />
+          )}
         />
-
         <Input id="howDidYouHear" label="How did you hear about us?" {...register('howDidYouHear')} />
-      </div>
+      </Grid>
 
-      {serverError ? <p className="text-sm text-red-400">{serverError}</p> : null}
+      {serverError ? <p style={{ fontSize: '0.875rem', color: 'var(--red-11)' }}>{serverError}</p> : null}
 
-      <Button type="submit" size="xl" className="w-full justify-center" loading={isSubmitting}>
+      <Button type="submit" size="xl" loading={isSubmitting} style={{ width: '100%', justifyContent: 'center' }}>
         Confirm My Booking
       </Button>
     </form>

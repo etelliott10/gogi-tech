@@ -1,14 +1,19 @@
+import { Avatar, Flex } from '@radix-ui/themes';
+
 export function AvatarGroup() {
   return (
-    <div className="flex -space-x-2">
+    <Flex style={{ marginLeft: '0.5rem' }}>
       {['AG', 'KP', 'LM'].map((initials) => (
-        <span
-          key={initials}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-bg-card text-[10px] font-semibold text-text-primary"
-        >
-          {initials}
-        </span>
+        <div key={initials} style={{ marginLeft: '-0.5rem' }}>
+          <Avatar
+            size="2"
+            fallback={initials}
+            variant="solid"
+            color="crimson"
+            style={{ border: '2px solid var(--color-bg-card)' }}
+          />
+        </div>
       ))}
-    </div>
+    </Flex>
   );
 }

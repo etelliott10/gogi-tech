@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+import { TextArea, Text } from '@radix-ui/themes';
 
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -7,27 +7,29 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  { label, error, className, id, ...props },
+  { label, error, id, ...props },
   ref
 ) {
   return (
-    <div className="space-y-2">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       {label ? (
-        <label htmlFor={id} className="text-sm font-medium text-text-primary">
+        <Text as="label" htmlFor={id} size="2" weight="medium">
           {label}
-        </label>
+        </Text>
       ) : null}
-      <textarea
+      <TextArea
         id={id}
         ref={ref}
-        className={cn(
-          'w-full rounded-xl border border-border bg-bg-card px-3 py-2.5 text-sm text-text-primary outline-none transition',
-          'placeholder:text-text-muted focus:border-primary-light focus:ring-2 focus:ring-primary/20',
-          className
-        )}
-        {...props}
+        size="2"
+        variant="surface"
+        color={error ? 'red' : undefined}
+        {...(props as React.ComponentPropsWithoutRef<typeof TextArea>)}
       />
-      {error ? <p className="text-xs text-red-400">{error}</p> : null}
+      {error ? (
+        <Text size="1" color="red">
+          {error}
+        </Text>
+      ) : null}
     </div>
   );
 });
