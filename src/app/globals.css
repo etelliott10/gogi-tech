@@ -386,9 +386,7 @@ h1 em {
 }
 
 .signal-strip {
-  display: flex;
   overflow: hidden;
-  gap: 0;
   padding: 15px 0;
   border-block: 1px solid var(--forest);
   background: var(--cream);
@@ -396,24 +394,31 @@ h1 em {
   white-space: nowrap;
 }
 
-.signal-strip span {
+.signal-track {
   display: flex;
   align-items: center;
-  gap: 30px;
+  justify-content: space-between;
+  width: min(1180px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.signal-track span {
+  display: flex;
+  align-items: center;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.signal-strip span::after {
+.signal-track span:not(:last-child)::after {
   margin-inline: 30px;
   color: var(--orange);
   content: "✦";
 }
 
 .services {
-  padding-block: 120px;
+  padding: 120px 0 36px;
 }
 
 .section-heading {
@@ -540,7 +545,7 @@ h1 em {
   grid-template-columns: 0.88fr 1fr;
   gap: 110px;
   align-items: center;
-  padding-block: 90px 130px;
+  padding-block: 64px 130px;
 }
 
 .fit h2 {
@@ -788,6 +793,12 @@ h1 em {
   .deliverables {
     grid-template-columns: 1fr;
   }
+
+  .signal-track {
+    justify-content: flex-start;
+    width: max-content;
+    margin-left: 24px;
+  }
 }
 
 @media (max-width: 620px) {
@@ -857,6 +868,10 @@ h1 em {
     padding-block: 88px;
   }
 
+  .services {
+    padding-bottom: 32px;
+  }
+
   .section-heading h2,
   .fit h2,
   .contact h2 {
@@ -874,7 +889,11 @@ h1 em {
   }
 
   .fit {
-    padding-block: 80px 95px;
+    padding-block: 56px 95px;
+  }
+
+  .signal-track {
+    margin-left: 16px;
   }
 
   .example-row {

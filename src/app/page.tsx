@@ -172,10 +172,12 @@ export default function Home() {
       </section>
 
       <section className="signal-strip" aria-label="Common business challenges">
-        <span>Still copying data between systems?</span>
-        <span>Following up by hand?</span>
-        <span>Training from the same checklist?</span>
-        <span>There&apos;s a better workflow.</span>
+        <div className="signal-track">
+          <span>Still copying data between systems?</span>
+          <span>Following up by hand?</span>
+          <span>Training from the same checklist?</span>
+          <span>There&apos;s a better workflow.</span>
+        </div>
       </section>
 
       <section className="services section-shell" id="services">
