@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    "https://gogi-tech-automation.elliott-t-elijah.chatgpt.site",
+  ),
   title: "Gogi Tech | Practical Business Automation",
   description:
     "Gogi Tech helps owner-led companies automate repetitive work, connect outdated systems, and build practical AI-powered tools.",
