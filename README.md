@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gogi Lead CRM
 
-## Getting Started
+A frontend-first lead workspace built with Next.js, React, TypeScript, and
+Tailwind CSS.
 
-First, run the development server:
+## Current state
+
+The repository is an early scaffold. It currently contains one placeholder
+page and no CRM domain model, backend, API routes, authentication, database
+client, or third-party service integrations.
+
+The app uses Next.js static export. A production build creates an `out/`
+directory containing only HTML, CSS, JavaScript, and public assets. No
+long-running Node.js or Next.js server is required in production.
+
+## Commands
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000` during development. After `npm run build`, serve
+the `out/` directory with any static file host.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Frontend-only boundary
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Keep these concerns inside the app:
 
-## Learn More
+- Presentation and client-side interaction
+- CRM domain types and deterministic business rules
+- Seed/demo data
+- Browser persistence for prototypes
+- Calls to explicitly configured external APIs
 
-To learn more about Next.js, take a look at the following resources:
+Do not add Next.js route handlers, server actions, middleware, secrets, direct
+database connections, or server-only packages. Browser code cannot safely
+hold private API keys. If the product later needs privileged operations,
+authentication enforcement, shared durable data, or webhooks, place those
+behind a separately deployed service and access it through a small typed
+client adapter.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Suggested source layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+src/
+  app/                 routes and page composition
+  components/          shared visual components
+  features/            lead, pipeline, task, and activity modules
+  lib/                 browser-safe utilities and API adapters
+  data/                seed/demo fixtures
+  types/               shared domain types
+```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This keeps product code cohesive while preserving the option to replace demo
+storage with an external service later.
